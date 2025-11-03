@@ -7,30 +7,34 @@
     <p>Enter your values, press the button, and see how the FizzBuzz logic works.</p>
     <EditForm Model="fizzBuzzModel">
         <DataAnnotationsValidator />
-        <div class="border border-secondary rounded p-4">
-            <div class="row">
-                <div class="col-md-4">
+        <div class="border border-secondary rounded p-4 fizzbuzz-form">
+            <div class="row g-3 align-items-stretch fizzbuzz-labels">
+                <div class="col-12 col-md-3 d-flex flex-column">
                     <label for="fizzValue" class="form-label">Fizz Value</label>
                     <InputNumber id="fizzValue" class="form-control" @bind-Value="fizzBuzzModel.FizzValue"
                         aria-label="Fizz Value" aria-describedby="fizzHelp" placeholder="Fizz Value" />
                     <div id="fizzHelp" class="form-text text-muted">Replace multiples of this number with "Fizz". </div>
                     <ValidationMessage for="@(() => fizzBuzzModel.FizzValue)"></ValidationMessage>
                 </div>
-                <div class="col-md-4">
+                <div class="col-12 col-md-3 d-flex flex-column">
                     <label for="buzzValue" class="form-label">Buzz Value</label>
                     <InputNumber id="buzzValue" class="form-control" @bind-Value="fizzBuzzModel.BuzzValue"
                         aria-label="Buzz Value" aria-describedby="buzzHelp" placeholder="Buzz Value" />
                     <div id="buzzHelp" class="form-text text-muted">Replace multiples of this number with "Buzz". </div>
                     <ValidationMessage for="@(() => fizzBuzzModel.BuzzValue)"></ValidationMessage>
                 </div>
-                <div class="col-md-4">
+                <div class="col-12 col-md-3 d-flex flex-column">
                     <label for="stopValue" class="form-label">Stop Value</label>
                     <InputNumber id="stopValue" class="form-control" @bind-Value="fizzBuzzModel.StopValue"
                         aria-label="Stop Value" aria-describedby="stopHelp" placeholder="Stop Value" />
                     <div id="stopHelp" class="form-text text-muted">Replace multiples of this number with "Stop". </div>
                     <ValidationMessage for="@(() => fizzBuzzModel.StopValue)"></ValidationMessage>
                 </div>
-                <button type="submit" class="btn btn-primary">Send</button>
+                <div class="col-12 col-md-3 d-flex mt-2 mt-md-0">
+                    <button type="submit"
+                        class="btn btn-primary w-100 flex-fill fizzbuzz-go-button"
+                        aria-label="Generate FizzBuzz Results">Generate</button>
+                </div>
             </div>
         </div>
     </EditForm>
