@@ -1,60 +1,34 @@
 @page "/fizzbuzz"
+@using BlazorFizzBuzz.Models
 
-<PageTitle>FizzBuzz - Home </PageTitle>
-<div class="container-xxl">
-    <h3 class="mb-4">FizzBuzz: A Coding Challenge built with Blazor</h3>
-</div>
-<div>Showing Modern Web Development Skills Through a Classic Codice</div>
-<div class="container py-4">
-    <h3 class="mb-4">FizzBuzz: A Coding Challenge built with Blazor</h3>
-     
-    <EditForm Model="_formModel">
-        <div class="row g-3 align-items-stretch fizzbuzz-form">
-            <div class="col-12 col-lg-9">
-                <div class="row g-2 fizzbuzz-labels">
-                    <div class="col-12 col-lg-4">
-                        <label for="fizzValue" class="form-label">Fizz value</label>
-                    </div>
-                    <div class="col-12 col-lg-4">
-                        <label for="buzzValue" class="form-label">Buzz value</label>
-                    </div>
-                    <div class="col-12 col-lg-4">
-                        <label for="stopValue" class="form-label">Stop value (max 5000)</label>
-                    </div>
+<PageTitle>Fizz Buzz</PageTitle>
+<div class="container-xxl my-3">
+    <h3>Solve the FizzBuzz Challenge</h3>
+    <p>Enter your values, press the button, and see how the FizzBuzz logic works.</p>
+    <EditForm Model="fizzBuzzModel">
+        <div class="border border-secondary rounded p-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="fizzValue" class="form-label">Fizz Value</label>
+                    <InputNumber id="fizzValue" class="form-control" @bind-Value="fizzBuzzModel.FizzValue"
+                        placeholder="Fizz Value" />
                 </div>
-                <div class="row g-2">
-                    <div class="col-12 col-lg-4">
-                        <InputText id="fizzValue" class="form-control" @bind-Value="_formModel.FizzValue" type="number" />
-                    </div>
-                    <div class="col-12 col-lg-4">
-                        <InputText id="buzzValue" class="form-control" @bind-Value="_formModel.BuzzValue" type="number" />
-                    </div>
-                    <div class="col-12 col-lg-4">
-                        <InputText id="stopValue" class="form-control" @bind-Value="_formModel.StopValue" type="number" />
-                    </div>
+                <div class="col-md-4">
+                    <label for="buzzValue" class="form-label">Buzz Value</label>
+                    <InputNumber id="buzzValue" class="form-control" @bind-Value="fizzBuzzModel.BuzzValue"
+                        placeholder="Buzz Value" />
                 </div>
-            </div>
-            <div class="col-12 col-lg-3 d-flex">
-                <button type="button" class="btn btn-dark w-100 h-100 fizzbuzz-go-button">
-                    Go
-                </button>
+                <div class="col-md-4">
+                    <label for="stopValue" class="form-label">Stop Value</label>
+                    <InputNumber id="stopValue" class="form-control" @bind-Value="fizzBuzzModel.StopValue"
+                        placeholder="Stop Value" />
+                </div>
             </div>
         </div>
     </EditForm>
 </div>
 
-@code {
-    private readonly FizzBuzzFormModel _formModel = new()
-    {
-        FizzValue = "3",
-        BuzzValue = "5",
-        StopValue = "25"
-    };
 
-    private sealed class FizzBuzzFormModel
-    {
-        public string FizzValue { get; set; } = string.Empty;
-        public string BuzzValue { get; set; } = string.Empty;
-        public string StopValue { get; set; } = string.Empty;
-    }
+@code {
+    private BlazorFizzBuzz.Models.FizzBuzz fizzBuzzModel = new();
 }
