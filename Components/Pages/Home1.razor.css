@@ -1,0 +1,24 @@
+.fizzbuzz-form {
+    padding: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 0.75rem;
+}
+
+.fizzbuzz-labels .form-label {
+    margin-bottom: 0;
+    font-weight: 500;
+    color: var(--bs-secondary-color, #6c757d);
+}
+
+.fizzbuzz-go-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+@media (min-width: 992px) {
+    .fizzbuzz-go-button {
+        min-height: calc(100% + 0.5rem);
+    }
+}

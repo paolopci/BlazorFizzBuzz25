@@ -1,6 +1,55 @@
-﻿@page "/fizz"
-<h3>FizzBuzz: A Coding Challenge build with Blazor</h3>
+@page "/fizz"
+
+<div class="container py-4">
+    <h3 class="mb-4">FizzBuzz: A Coding Challenge built with Blazor</h3>
+
+    <EditForm Model="_formModel">
+        <div class="row g-3 align-items-stretch fizzbuzz-form">
+            <div class="col-12 col-lg-9">
+                <div class="row g-2 fizzbuzz-labels">
+                    <div class="col-12 col-lg-4">
+                        <label for="fizzValue" class="form-label">Fizz value</label>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <label for="buzzValue" class="form-label">Buzz value</label>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <label for="stopValue" class="form-label">Stop value (max 5000)</label>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-12 col-lg-4">
+                        <InputText id="fizzValue" class="form-control" @bind-Value="_formModel.FizzValue" type="number" />
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <InputText id="buzzValue" class="form-control" @bind-Value="_formModel.BuzzValue" type="number" />
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <InputText id="stopValue" class="form-control" @bind-Value="_formModel.StopValue" type="number" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3 d-flex">
+                <button type="button" class="btn btn-dark w-100 h-100 fizzbuzz-go-button">
+                    Go
+                </button>
+            </div>
+        </div>
+    </EditForm>
+</div>
 
 @code {
+    private readonly FizzBuzzFormModel _formModel = new()
+    {
+        FizzValue = "3",
+        BuzzValue = "5",
+        StopValue = "25"
+    };
 
+    private sealed class FizzBuzzFormModel
+    {
+        public string FizzValue { get; set; } = string.Empty;
+        public string BuzzValue { get; set; } = string.Empty;
+        public string StopValue { get; set; } = string.Empty;
+    }
 }
