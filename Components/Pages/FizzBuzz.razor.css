@@ -4,6 +4,10 @@
     border-radius: 0.75rem;
 }
 
+.fizzbuzz-labels .d-flex.flex-column {
+    min-height: 100%;
+}
+
 .fizzbuzz-labels .form-label {
     margin-bottom: 0;
     font-weight: 500;
@@ -15,6 +19,7 @@
     align-items: center;
     justify-content: center;
     font-weight: 600;
+    height: 100%;
 }
 
 @media (min-width: 992px) {
