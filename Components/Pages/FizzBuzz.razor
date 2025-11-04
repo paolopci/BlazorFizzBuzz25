@@ -94,16 +94,19 @@ else if (fizzBuzzResults.Count > 0)
 
     private void GenerateFizzBuzzResults()
     {
+        // Azzeriamo eventuali risultati o messaggi precedenti per ricominciare da uno stato pulito.
         fizzBuzzResults.Clear();
         fizzBuzzOutputJson = null;
         fizzBuzzErrorJson = null;
 
+        // Se i parametri non superano le verifiche richieste, serializziamo l'errore e interrompiamo.
         if (!TryValidateParameters(out var fizz, out var buzz, out var stop, out var validationMessage))
         {
             fizzBuzzErrorJson = JsonSerializer.Serialize(new { error = validationMessage });
             return;
         }
 
+        // Cicliamo da 1 allo stop compreso, applicando le regole FizzBuzz e popolando l'elenco.
         for (var number = 1; number <= stop; number++)
         {
             var isFizz = number % fizz == 0;
@@ -127,6 +130,7 @@ else if (fizzBuzzResults.Count > 0)
             }
         }
 
+        // Controllo di sicurezza: convalida che la sequenza sia completa e priva di voci vuote.
         var containsEmptyResult = false;
         foreach (var result in fizzBuzzResults)
         {
@@ -145,33 +149,39 @@ else if (fizzBuzzResults.Count > 0)
             return;
         }
 
+        // Se tutto è andato a buon fine, serializziamo l'output secondo il formato richiesto.
         fizzBuzzOutputJson = JsonSerializer.Serialize(new { fizzBuzzResults });
     }
 
     private bool TryValidateParameters(out int fizz, out int buzz, out int stop, out string errorMessage)
     {
+        // Recuperiamo i valori dal modello, sostituendo con 0 se mancanti.
         fizz = fizzBuzzModel.FizzValue ?? 0;
         buzz = fizzBuzzModel.BuzzValue ?? 0;
         stop = fizzBuzzModel.StopValue ?? 0;
 
+        // Controllo di base: tutti i numeri devono essere strettamente positivi.
         if (fizz <= 0 || buzz <= 0 || stop <= 0)
         {
             errorMessage = "All parameters must be positive integers greater than zero.";
             return false;
         }
 
+        // Vincolo specifico: il valore Fizz deve essere minore del valore Buzz.
         if (fizz >= buzz)
         {
             errorMessage = "Fizz value must be less than the buzz value.";
             return false;
         }
 
+        // Vincolo per lo stop: deve essere più grande di Buzz per consentire casi di sostituzione.
         if (stop <= buzz)
         {
             errorMessage = "Stop value must be greater than the buzz value.";
             return false;
         }
 
+        // Se tutti i controlli sono superati, nessun messaggio di errore e ritorno positivo.
         errorMessage = string.Empty;
         return true;
     }
