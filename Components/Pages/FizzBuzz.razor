@@ -49,40 +49,7 @@
     </EditForm>
 </div>
 
-@if (!string.IsNullOrEmpty(fizzBuzzErrorJson))
-{
-    <div class="alert alert-warning mt-4" role="alert">
-        @fizzBuzzErrorJson
-    </div>
-}
-else if (fizzBuzzResults.Count > 0)
-{
-    <div class="mt-4">
-        <h4>Risultati generati</h4>
-        <ol class="fizzbuzz-results-list">
-            @foreach (var item in fizzBuzzResults)
-            {
-                <li>
-                    @switch (item)
-                    {
-                        case "FizzBuzz":
-                            <span class="fizzbuzz-pill fizzbuzz-pill--fizzbuzz">@item</span>
-                            break;
-                        case "Fizz":
-                            <span class="fizzbuzz-pill fizzbuzz-pill--fizz">@item</span>
-                            break;
-                        case "Buzz":
-                            <span class="fizzbuzz-pill fizzbuzz-pill--buzz">@item</span>
-                            break;
-                        default:
-                            @item
-                            break;
-                    }
-                </li>
-            }
-        </ol>
-    </div>
-}
+<OutPutResult Items="@fizzBuzzResults" ErrorJson="@fizzBuzzErrorJson" />
 
 
 @code {

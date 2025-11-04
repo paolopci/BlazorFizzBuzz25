@@ -1,0 +1,44 @@
+@using Microsoft.AspNetCore.Components
+
+@if (!string.IsNullOrEmpty(ErrorJson))
+{
+    <div class="alert alert-warning mt-4" role="alert">
+        @ErrorJson
+    </div>
+}
+else if (Items is { Count: > 0 })
+{
+    <div class="mt-4">
+        <h4>Risultati generati</h4>
+        <ol class="fizzbuzz-results-list">
+            @foreach (var item in Items)
+            {
+                <li>
+                    @switch (item)
+                    {
+                        case "FizzBuzz":
+                            <span class="fizzbuzz-pill fizzbuzz-pill--fizzbuzz">@item</span>
+                            break;
+                        case "Fizz":
+                            <span class="fizzbuzz-pill fizzbuzz-pill--fizz">@item</span>
+                            break;
+                        case "Buzz":
+                            <span class="fizzbuzz-pill fizzbuzz-pill--buzz">@item</span>
+                            break;
+                        default:
+                            @item
+                            break;
+                    }
+                </li>
+            }
+        </ol>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public IReadOnlyList<string>? Items { get; set; }
+
+    [Parameter]
+    public string? ErrorJson { get; set; }
+}
