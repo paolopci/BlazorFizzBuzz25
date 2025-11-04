@@ -1,0 +1,23 @@
+.fizzbuzz-results-list {
+    padding-left: 1.25rem;
+}
+
+.fizzbuzz-results-list li {
+    color: #212529;
+}
+
+.fizzbuzz-pill {
+    font-weight: 700;
+}
+
+.fizzbuzz-pill--fizz {
+    color: #0d6efd;
+}
+
+.fizzbuzz-pill--buzz {
+    color: #dc3545;
+}
+
+.fizzbuzz-pill--fizzbuzz {
+    color: #198754;
+}

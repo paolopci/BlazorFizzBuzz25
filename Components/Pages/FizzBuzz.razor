@@ -1,0 +1,155 @@
+﻿@page "/fizzbuzz"
+@using BlazorFizzBuzz.Models
+@using System.Text.Json
+
+<PageTitle>Fizz Buzz</PageTitle>
+<div class="container-xxl my-3">
+    <h3>Solve the FizzBuzz Challenge</h3>
+    <p>Enter your values, press the button, and see how the FizzBuzz logic works.</p>
+    <EditForm Model="fizzBuzzModel" OnValidSubmit="GenerateFizzBuzzResults">
+        <DataAnnotationsValidator />
+        <div class="border border-secondary rounded p-4 fizzbuzz-form">
+            <div class="fizzbuzz-grid">
+                <div class="fizzbuzz-input fizzbuzz-input--fizz">
+                    <label for="fizzValue" class="form-label">Fizz Value</label>
+                    <InputNumber id="fizzValue" class="form-control" @bind-Value="fizzBuzzModel.FizzValue"
+                        aria-label="Fizz Value" aria-describedby="fizzHelp" placeholder="Fizz Value" />
+                </div>
+                <div class="fizzbuzz-help fizzbuzz-help--fizz">
+                    <div id="fizzHelp" class="form-text text-muted">Replace multiples of this number with "Fizz". </div>
+                    <ValidationMessage for="@(() => fizzBuzzModel.FizzValue)"></ValidationMessage>
+                </div>
+
+                <div class="fizzbuzz-input fizzbuzz-input--buzz">
+                    <label for="buzzValue" class="form-label">Buzz Value</label>
+                    <InputNumber id="buzzValue" class="form-control" @bind-Value="fizzBuzzModel.BuzzValue"
+                        aria-label="Buzz Value" aria-describedby="buzzHelp" placeholder="Buzz Value" />
+                </div>
+                <div class="fizzbuzz-help fizzbuzz-help--buzz">
+                    <div id="buzzHelp" class="form-text text-muted">Replace multiples of this number with "Buzz". </div>
+                    <ValidationMessage for="@(() => fizzBuzzModel.BuzzValue)"></ValidationMessage>
+                </div>
+
+                <div class="fizzbuzz-input fizzbuzz-input--stop">
+                    <label for="stopValue" class="form-label">Stop Value</label>
+                    <InputNumber id="stopValue" class="form-control" @bind-Value="fizzBuzzModel.StopValue"
+                        aria-label="Stop Value" aria-describedby="stopHelp" placeholder="Stop Value" />
+                </div>
+                <div class="fizzbuzz-help fizzbuzz-help--stop">
+                    <div id="stopHelp" class="form-text text-muted">Replace multiples of this number with "Stop". </div>
+                    <ValidationMessage for="@(() => fizzBuzzModel.StopValue)"></ValidationMessage>
+                </div>
+
+                <div class="fizzbuzz-action">
+                    <button type="submit" class="btn btn-primary fizzbuzz-go-button"
+                        aria-label="Generate FizzBuzz Results">Generate</button>
+                </div>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+<OutPutResult Items="@fizzBuzzResults" ErrorJson="@fizzBuzzErrorJson" />
+
+
+@code {
+    // ricorda il nime deve essere univoco!!!
+    private BlazorFizzBuzz.Models.FizzBuzz fizzBuzzModel = new();
+    private List<string> fizzBuzzResults = new();
+    private string? fizzBuzzOutputJson;
+    private string? fizzBuzzErrorJson;
+
+    private void GenerateFizzBuzzResults()
+    {
+        // Azzeriamo eventuali risultati o messaggi precedenti per ricominciare da uno stato pulito.
+        fizzBuzzResults.Clear();
+        fizzBuzzOutputJson = null;
+        fizzBuzzErrorJson = null;
+
+        // Se i parametri non superano le verifiche richieste, serializziamo l'errore e interrompiamo.
+        if (!TryValidateParameters(out var fizz, out var buzz, out var stop, out var validationMessage))
+        {
+            fizzBuzzErrorJson = JsonSerializer.Serialize(new { error = validationMessage });
+            return;
+        }
+
+        // Cicliamo da 1 allo stop compreso, applicando le regole FizzBuzz e popolando l'elenco.
+        for (var number = 1; number <= stop; number++)
+        {
+            var isFizz = number % fizz == 0;
+            var isBuzz = number % buzz == 0;
+
+            if (isFizz && isBuzz)
+            {
+                fizzBuzzResults.Add("FizzBuzz");
+            }
+            else if (isFizz)
+            {
+                fizzBuzzResults.Add("Fizz");
+            }
+            else if (isBuzz)
+            {
+                fizzBuzzResults.Add("Buzz");
+            }
+            else
+            {
+                fizzBuzzResults.Add(number.ToString());
+            }
+        }
+
+        // Controllo di sicurezza: convalida che la sequenza sia completa e priva di voci vuote.
+        var containsEmptyResult = false;
+        foreach (var result in fizzBuzzResults)
+        {
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                containsEmptyResult = true;
+                break;
+            }
+        }
+
+        if (fizzBuzzResults.Count != stop || containsEmptyResult)
+        {
+            fizzBuzzResults.Clear();
+            const string validationError = "Generated results did not match the expected sequence length.";
+            fizzBuzzErrorJson = JsonSerializer.Serialize(new { error = validationError });
+            return;
+        }
+
+        // Se tutto è andato a buon fine, serializziamo l'output secondo il formato richiesto.
+        fizzBuzzOutputJson = JsonSerializer.Serialize(new { fizzBuzzResults });
+    }
+
+    private bool TryValidateParameters(out int fizz, out int buzz, out int stop, out string errorMessage)
+    {
+        // Recuperiamo i valori dal modello, sostituendo con 0 se mancanti.
+        fizz = fizzBuzzModel.FizzValue ?? 0;
+        buzz = fizzBuzzModel.BuzzValue ?? 0;
+        stop = fizzBuzzModel.StopValue ?? 0;
+
+        // Controllo di base: tutti i numeri devono essere strettamente positivi.
+        if (fizz <= 0 || buzz <= 0 || stop <= 0)
+        {
+            errorMessage = "All parameters must be positive integers greater than zero.";
+            return false;
+        }
+
+        // Vincolo specifico: il valore Fizz deve essere minore del valore Buzz.
+        if (fizz >= buzz)
+        {
+            errorMessage = "Fizz value must be less than the buzz value.";
+            return false;
+        }
+
+        // Vincolo per lo stop: deve essere più grande di Buzz per consentire casi di sostituzione.
+        if (stop <= buzz)
+        {
+            errorMessage = "Stop value must be greater than the buzz value.";
+            return false;
+        }
+
+        // Se tutti i controlli sono superati, nessun messaggio di errore e ritorno positivo.
+        errorMessage = string.Empty;
+        return true;
+    }
+}
