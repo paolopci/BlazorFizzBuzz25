@@ -75,7 +75,7 @@
 
 @media (min-width: 768px) {
     .fizzbuzz-grid {
-        grid-template-columns: repeat(4, minmax(12rem, 1fr));
+        grid-template-columns: repeat(4, minmax(9.5rem, 1fr));
         grid-template-areas:
             "fizz-input buzz-input stop-input action"
             "fizz-help buzz-help stop-help .";
