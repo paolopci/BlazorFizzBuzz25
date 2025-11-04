@@ -1,17 +1,68 @@
-.fizzbuzz-form {
+﻿.fizzbuzz-form {
+    overflow-x: auto;
     padding: 1.5rem;
     background-color: rgba(255, 255, 255, 0.04);
     border-radius: 0.75rem;
 }
 
-.fizzbuzz-labels .d-flex.flex-column {
-    min-height: 100%;
+.fizzbuzz-grid {
+    display: grid;
+    gap: 1rem 1.5rem;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+        "fizz-input"
+        "fizz-help"
+        "buzz-input"
+        "buzz-help"
+        "stop-input"
+        "stop-help"
+        "action";
 }
 
-.fizzbuzz-labels .form-label {
+.fizzbuzz-input,
+.fizzbuzz-help {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.fizzbuzz-input .form-label {
     margin-bottom: 0;
     font-weight: 500;
     color: var(--bs-secondary-color, #6c757d);
+}
+
+.fizzbuzz-help .form-text {
+    margin-bottom: 0;
+}
+
+.fizzbuzz-input--fizz {
+    grid-area: fizz-input;
+}
+
+.fizzbuzz-help--fizz {
+    grid-area: fizz-help;
+}
+
+.fizzbuzz-input--buzz {
+    grid-area: buzz-input;
+}
+
+.fizzbuzz-help--buzz {
+    grid-area: buzz-help;
+}
+
+.fizzbuzz-input--stop {
+    grid-area: stop-input;
+}
+
+.fizzbuzz-help--stop {
+    grid-area: stop-help;
+}
+
+.fizzbuzz-action {
+    grid-area: action;
+    display: flex;
 }
 
 .fizzbuzz-go-button {
@@ -19,11 +70,23 @@
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    height: 100%;
+    width: 100%;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 768px) {
+    .fizzbuzz-grid {
+        grid-template-columns: repeat(4, minmax(12rem, 1fr));
+        grid-template-areas:
+            "fizz-input buzz-input stop-input action"
+            "fizz-help buzz-help stop-help .";
+        align-items: start;
+    }
+
+    .fizzbuzz-action {
+        align-self: stretch;
+    }
+
     .fizzbuzz-go-button {
-        min-height: calc(100% + 0.5rem);
+        height: 100%;
     }
 }
