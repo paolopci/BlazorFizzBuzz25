@@ -1,11 +1,12 @@
 ﻿@page "/fizzbuzz"
 @using BlazorFizzBuzz.Models
+@using System.Text.Json
 
 <PageTitle>Fizz Buzz</PageTitle>
 <div class="container-xxl my-3">
     <h3>Solve the FizzBuzz Challenge</h3>
     <p>Enter your values, press the button, and see how the FizzBuzz logic works.</p>
-    <EditForm Model="fizzBuzzModel">
+    <EditForm Model="fizzBuzzModel" OnValidSubmit="GenerateFizzBuzzResults">
         <DataAnnotationsValidator />
         <div class="border border-secondary rounded p-4 fizzbuzz-form">
             <div class="fizzbuzz-grid">
@@ -40,8 +41,7 @@
                 </div>
 
                 <div class="fizzbuzz-action">
-                    <button type="submit"
-                        class="btn btn-primary fizzbuzz-go-button"
+                    <button type="submit" class="btn btn-primary fizzbuzz-go-button"
                         aria-label="Generate FizzBuzz Results">Generate</button>
                 </div>
             </div>
@@ -49,8 +49,114 @@
     </EditForm>
 </div>
 
+@if (!string.IsNullOrEmpty(fizzBuzzErrorJson))
+{
+    <div class="alert alert-warning mt-4" role="alert">
+        @fizzBuzzErrorJson
+    </div>
+}
+else if (fizzBuzzResults.Count > 0)
+{
+    <div class="mt-4">
+        <h4>Risultati generati</h4>
+        <ol class="fizzbuzz-results-list">
+            @foreach (var item in fizzBuzzResults)
+            {
+                <li>@item</li>
+            }
+        </ol>
+    </div>
+}
+
 
 @code {
     // ricorda il nime deve essere univoco!!!
     private BlazorFizzBuzz.Models.FizzBuzz fizzBuzzModel = new();
+    private List<string> fizzBuzzResults = new();
+    private string? fizzBuzzOutputJson;
+    private string? fizzBuzzErrorJson;
+
+    private void GenerateFizzBuzzResults()
+    {
+        fizzBuzzResults.Clear();
+        fizzBuzzOutputJson = null;
+        fizzBuzzErrorJson = null;
+
+        if (!TryValidateParameters(out var fizz, out var buzz, out var stop, out var validationMessage))
+        {
+            fizzBuzzErrorJson = JsonSerializer.Serialize(new { error = validationMessage });
+            return;
+        }
+
+        for (var number = 1; number <= stop; number++)
+        {
+            var isFizz = number % fizz == 0;
+            var isBuzz = number % buzz == 0;
+
+            if (isFizz && isBuzz)
+            {
+                fizzBuzzResults.Add("FizzBuzz");
+            }
+            else if (isFizz)
+            {
+                fizzBuzzResults.Add("Fizz");
+            }
+            else if (isBuzz)
+            {
+                fizzBuzzResults.Add("Buzz");
+            }
+            else
+            {
+                fizzBuzzResults.Add(number.ToString());
+            }
+        }
+
+        var containsEmptyResult = false;
+        foreach (var result in fizzBuzzResults)
+        {
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                containsEmptyResult = true;
+                break;
+            }
+        }
+
+        if (fizzBuzzResults.Count != stop || containsEmptyResult)
+        {
+            fizzBuzzResults.Clear();
+            const string validationError = "Generated results did not match the expected sequence length.";
+            fizzBuzzErrorJson = JsonSerializer.Serialize(new { error = validationError });
+            return;
+        }
+
+        fizzBuzzOutputJson = JsonSerializer.Serialize(new { fizzBuzzResults });
+    }
+
+    private bool TryValidateParameters(out int fizz, out int buzz, out int stop, out string errorMessage)
+    {
+        fizz = fizzBuzzModel.FizzValue ?? 0;
+        buzz = fizzBuzzModel.BuzzValue ?? 0;
+        stop = fizzBuzzModel.StopValue ?? 0;
+
+        if (fizz <= 0 || buzz <= 0 || stop <= 0)
+        {
+            errorMessage = "All parameters must be positive integers greater than zero.";
+            return false;
+        }
+
+        if (fizz >= buzz)
+        {
+            errorMessage = "Fizz value must be less than the buzz value.";
+            return false;
+        }
+
+        if (stop <= buzz)
+        {
+            errorMessage = "Stop value must be greater than the buzz value.";
+            return false;
+        }
+
+        errorMessage = string.Empty;
+        return true;
+    }
 }

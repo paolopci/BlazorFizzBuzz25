@@ -31,11 +31,10 @@ namespace BlazorFizzBuzz.Models
                     new[] { nameof(BuzzValue) });
             }
 
-            var product = (long)fizz * buzz;
-            if (stop <= product)
+            if (stop <= buzz)
             {
                 yield return new ValidationResult(
-                    "Stop value must be greater than the product of fizz and buzz.",
+                    "Stop value must be greater than the buzz value.",
                     new[] { nameof(StopValue) });
             }
         }
