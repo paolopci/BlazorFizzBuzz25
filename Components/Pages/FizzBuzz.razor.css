@@ -73,6 +73,30 @@
     width: 100%;
 }
 
+.fizzbuzz-results-list {
+    padding-left: 1.25rem;
+}
+
+.fizzbuzz-results-list li {
+    color: #212529;
+}
+
+.fizzbuzz-pill {
+    font-weight: 700;
+}
+
+.fizzbuzz-pill--fizz {
+    color: #0d6efd;
+}
+
+.fizzbuzz-pill--buzz {
+    color: #dc3545;
+}
+
+.fizzbuzz-pill--fizzbuzz {
+    color: #198754;
+}
+
 @media (min-width: 768px) {
     .fizzbuzz-grid {
         grid-template-columns: repeat(4, minmax(9.5rem, 1fr));

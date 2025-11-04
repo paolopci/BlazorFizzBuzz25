@@ -62,7 +62,23 @@ else if (fizzBuzzResults.Count > 0)
         <ol class="fizzbuzz-results-list">
             @foreach (var item in fizzBuzzResults)
             {
-                <li>@item</li>
+                <li>
+                    @switch (item)
+                    {
+                        case "FizzBuzz":
+                            <span class="fizzbuzz-pill fizzbuzz-pill--fizzbuzz">@item</span>
+                            break;
+                        case "Fizz":
+                            <span class="fizzbuzz-pill fizzbuzz-pill--fizz">@item</span>
+                            break;
+                        case "Buzz":
+                            <span class="fizzbuzz-pill fizzbuzz-pill--buzz">@item</span>
+                            break;
+                        default:
+                            @item
+                            break;
+                    }
+                </li>
             }
         </ol>
     </div>
